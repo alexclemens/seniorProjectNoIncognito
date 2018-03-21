@@ -130,16 +130,16 @@
 	                var canvas = document.getElementById("image");
 	                document.getElementById("image").src = canvas.toDataURL();
 	                Canvas2Image.saveAsPNG(canvas);
-	                html2canvas($("#container"), {
-			            onrendered: function(canvas) {
-			                theCanvas = canvas;
+	          //       html2canvas($("#container"), {
+			        //     onrendered: function(canvas) {
+			        //         theCanvas = canvas;
 
 
-			                // canvas.toBlob(function(blob) {
-			                //     saveAs(blob, "Dashboard.png"); 
-			                // });
-			            }
-			        });
+			        //         // canvas.toBlob(function(blob) {
+			        //         //     saveAs(blob, "Dashboard.png"); 
+			        //         // });
+			        //     }
+			        // });
 	            }
 
 				function animateClean() {
