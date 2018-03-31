@@ -86,9 +86,9 @@
 		<div id="content">
 			<h2>Face tracking in images</h2>
 			<div id="container">
-				<canvas id="image" width="625" height="500"></canvas>
-				<canvas id="overlay" width="625" height="500"></canvas>
-				<canvas id="overlay2" width="625" height="500"></canvas>
+				<canvas id="image" width="333" height="500"></canvas>
+				<canvas id="overlay" width="333" height="500"></canvas>
+				<canvas id="overlay2" width="333" height="500"></canvas>
 			</div>
 			<br/>
 			<input type="button" class="btn" id="start" value="start" onclick="animateClean()"></input>
@@ -113,8 +113,8 @@
 
 				var img = new Image();
 				img.onload = function() {
-					cc.drawImage(img,0,0,625, 500);
-					//window.setTimeout(document.getElementById("start").click(),2000);
+					cc.drawImage(img,0,0,333, 500);
+					window.setTimeout(document.getElementById("start").click(),2000);
 					// document.getElementById("files").click();
 				};
 
@@ -123,9 +123,8 @@
 				var curr_pic = names.data[parseInt(i)][pic_num];
 				// window.alert(curr_pic);
 				// window.alert(names.data);
-				//img.src = curr_pic;
-				img.src = './media/franck_02159.jpg';
-				loadImage(curr_pic);
+				img.src = curr_pic;
+				//img.src = './media/franck_02159.jpg';
 
 				var ctrack = new clm.tracker({stopOnConvergence : true});
 				ctrack.init();
@@ -179,6 +178,7 @@
 					document.getElementById("save").click();
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems with finding a face in this image. Try selecting the face in the image manually.")
+					setTimeout("window.location.href='clm_image.html'", 1000);
 				}, false);
 
 				// detect if tracker loses tracking of face
@@ -187,6 +187,7 @@
 					document.getElementById("save").click();
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems converging on a face in this image. Try selecting the face in the image manually.")
+					setTimeout("window.location.href='clm_image.html'", 1000);
 				}, false);
 
 				// detect if tracker has converged
