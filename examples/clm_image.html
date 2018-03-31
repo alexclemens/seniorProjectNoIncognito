@@ -75,6 +75,7 @@
 		<script src="./js/libs/dat.gui.min.js"></script>
 		<script src="../build/clmtrackr.js"></script>
 		<script src="./js/libs/Stats.js"></script>
+		<script src="../src/utils/JsonOutput/output.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="./styles/imgareaselect-default.css" />
 		<script src="./js/libs/jquery.min.js"></script>
@@ -90,10 +91,11 @@
 				<canvas id="overlay2" width="625" height="500"></canvas>
 			</div>
 			<br/>
-			<input type="button" class="btn" value="start" onclick="animateClean()"></input>
+			<input type="button" class="btn" id="start" value="start" onclick="animateClean()"></input>
 			<input type="button" class="btn" value="manually select face" onclick="selectBox()"></input>
-			<input type = "button" class="btn" name="saveMe" value="save me" onclick="to_image()"></input>
-			<input type="file" class="btn" id="files" name="files[]" />
+			<input type = "button" class="btn" id="save" name="saveMe" value="save me" onclick="to_image()"></input>
+			<!--input type="button" class="btn" id="clickme" value="Choose File" /-->
+			<input type="file" class="btn" id="files" name="files[]" onclick="fileHandleSelect()"/>
 			<p id="convergence"></p>
 			<div id="text">
 				<p>This is an example of precise face-tracking in an image using the javascript library <a href="https://github.com/auduno/clmtrackr"><em>clmtrackr</em></a>. To try it out, simply click start.</p>
@@ -112,8 +114,18 @@
 				var img = new Image();
 				img.onload = function() {
 					cc.drawImage(img,0,0,625, 500);
+					//window.setTimeout(document.getElementById("start").click(),2000);
+					// document.getElementById("files").click();
 				};
+
+				var i = (localStorage.getItem("i")).toString();
+				var pic_num = 'pic'+i;
+				var curr_pic = names.data[parseInt(i)][pic_num];
+				// window.alert(curr_pic);
+				// window.alert(names.data);
+				//img.src = curr_pic;
 				img.src = './media/franck_02159.jpg';
+				loadImage(curr_pic);
 
 				var ctrack = new clm.tracker({stopOnConvergence : true});
 				ctrack.init();
@@ -124,6 +136,7 @@
 				document.getElementById('container').appendChild( stats.domElement );
 
 				var drawRequest;
+
 
 				function to_image(){
 
@@ -163,12 +176,16 @@
 				// detect if tracker fails to find a face
 				document.addEventListener("clmtrackrNotFound", function(event) {
 					ctrack.stop();
+					document.getElementById("save").click();
+					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems with finding a face in this image. Try selecting the face in the image manually.")
 				}, false);
 
 				// detect if tracker loses tracking of face
 				document.addEventListener("clmtrackrLost", function(event) {
 					ctrack.stop();
+					document.getElementById("save").click();
+					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems converging on a face in this image. Try selecting the face in the image manually.")
 				}, false);
 
@@ -178,7 +195,11 @@
 					document.getElementById('convergence').style.backgroundColor = "#00FF00";
 					// stop drawloop
 					cancelRequestAnimFrame(drawRequest);
+					document.getElementById("save").click();
+					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
+					setTimeout("window.location.href='clm_image.html'", 1000);
 				}, false);
+				
 
 				// update stats on iteration
 				document.addEventListener("clmtrackrIteration", function(event) {
@@ -236,6 +257,7 @@
 										canvas.setAttribute('height', img.height);
 										cc.drawImage(img,0,0,img.width, img.height);
 									}
+									window.setTimeout(document.getElementById("start").click(),1000);
 								}
 								img.src = e.target.result;
 							};
@@ -245,6 +267,7 @@
 						document.getElementById('convergence').innerHTML = "";
 						ctrack.reset();
 					}
+
 
 				}
 
@@ -265,8 +288,10 @@
 						}
 
 						loadImage();
+
 					}
 					document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
 				} else {
 					$('#files').addClass("hide");
 					$('#loadimagetext').addClass("hide");
