@@ -30,7 +30,7 @@
 			#container {
 				position : relative;
 				width : 700px;
-				height : 500px;
+				height : 700px;
 				/*margin : 0px auto;*/
 			}
 
@@ -86,9 +86,9 @@
 		<div id="content">
 			<h2>Face tracking in images</h2>
 			<div id="container">
-				<canvas id="image" width="333" height="500"></canvas>
-				<canvas id="overlay" width="333" height="500"></canvas>
-				<canvas id="overlay2" width="333" height="500"></canvas>
+				<canvas id="image" width="700" height="700"></canvas>
+				<canvas id="overlay" width="700" height="700"></canvas>
+				<canvas id="overlay2" width="700" height="700"></canvas>
 			</div>
 			<br/>
 			<input type="button" class="btn" id="start" value="start" onclick="animateClean()"></input>
@@ -113,7 +113,7 @@
 
 				var img = new Image();
 				img.onload = function() {
-					cc.drawImage(img,0,0,333, 500);
+					cc.drawImage(img,0,0,img.width, img.height);
 					window.setTimeout(document.getElementById("start").click(),2000);
 					// document.getElementById("files").click();
 				};
@@ -166,7 +166,7 @@
 
 				function drawLoop() {
 					drawRequest = requestAnimFrame(drawLoop);
-					overlayCC.clearRect(0, 0, 720, 576);
+					overlayCC.clearRect(0, 0, 700, 700);
 					if (ctrack.getCurrentPosition()) {
 						ctrack.draw(overlay);
 					}
@@ -176,18 +176,20 @@
 				document.addEventListener("clmtrackrNotFound", function(event) {
 					ctrack.stop();
 					document.getElementById("save").click();
+					console.log("Not found: i =" + localStorage.getItem("i"));
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems with finding a face in this image. Try selecting the face in the image manually.")
-					setTimeout("window.location.href='clm_image.html'", 1000);
+					setTimeout("window.location.href='clm_image.html'", 500);
 				}, false);
 
 				// detect if tracker loses tracking of face
 				document.addEventListener("clmtrackrLost", function(event) {
 					ctrack.stop();
 					document.getElementById("save").click();
+					console.log("Lost: i =" + localStorage.getItem("i"));
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems converging on a face in this image. Try selecting the face in the image manually.")
-					setTimeout("window.location.href='clm_image.html'", 1000);
+					setTimeout("window.location.href='clm_image.html'", 500);
 				}, false);
 
 				// detect if tracker has converged
@@ -196,9 +198,10 @@
 					document.getElementById('convergence').style.backgroundColor = "#00FF00";
 					// stop drawloop
 					cancelRequestAnimFrame(drawRequest);
+					console.log("Good: i =" + localStorage.getItem("i"));
 					document.getElementById("save").click();
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
-					setTimeout("window.location.href='clm_image.html'", 1000);
+					setTimeout("window.location.href='clm_image.html'", 500);
 				}, false);
 				
 
@@ -209,7 +212,7 @@
 
 				// manual selection of faces (with jquery imgareaselect plugin)
 				function selectBox() {
-					overlayCC.clearRect(0, 0, 720, 576);
+					overlayCC.clearRect(0, 0, 700, 700);
 					document.getElementById('convergence').innerHTML = "";
 					ctrack.reset();
 					$('#overlay').addClass('hide');
@@ -242,12 +245,12 @@
 								var cc = canvas.getContext('2d');
 								var img = new Image();
 								img.onload = function() {
-									if (img.height > 500 || img.width > 700) {
+									if (img.height > 700 || img.width > 700) {
 										var rel = img.height/img.width;
 										var neww = 700;
 										var newh = neww*rel;
-										if (newh > 500) {
-											newh = 500;
+										if (newh > 700) {
+											newh = 700;
 											neww = newh/rel;
 										}
 										canvas.setAttribute('width', neww);
@@ -264,7 +267,7 @@
 							};
 						})(fileList[fileIndex]);
 						reader.readAsDataURL(fileList[fileIndex]);
-						overlayCC.clearRect(0, 0, 720, 576);
+						overlayCC.clearRect(0, 0, 700, 700);
 						document.getElementById('convergence').innerHTML = "";
 						ctrack.reset();
 					}
