@@ -7,53 +7,44 @@
 		<meta charset="utf-8">
 		<style>
 			@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
-
 			body {
 				font-family: 'Lato';
 				background-color: #f0f0f0;
 				margin: 0px auto;
 				max-width: 1150px;
 			}
-
 			#overlay {
 				position: absolute;
 				top: 0px;
 				left: 0px;
 			}
-
 			#overlay2 {
 				position: absolute;
 				top: 0px;
 				left: 0px;
 			}
-
 			#container {
 				position : relative;
 				width : 700px;
-				height : 700px;
+				height : 500px;
 				/*margin : 0px auto;*/
 			}
-
 			#content {
 				margin-top : 70px;
 				margin-left : 100px;
 				margin-right : 100px;
 				max-width: 950px;
 			}
-
 			#convergence {
 				display : inline;
 			}
-
 			h2 {
 				font-weight : 400;
 			}
-
 			.btn {
 				font-family: 'Lato';
 				font-size: 16px;
 			}
-
 			.hide {
 				display : none;
 			}
@@ -62,7 +53,6 @@
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-32642923-1']);
 			_gaq.push(['_trackPageview']);
-
 			(function() {
 				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -75,7 +65,6 @@
 		<script src="./js/libs/dat.gui.min.js"></script>
 		<script src="../build/clmtrackr.js"></script>
 		<script src="./js/libs/Stats.js"></script>
-		<script src="../src/utils/JsonOutput/MUCTnamesoutput.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="./styles/imgareaselect-default.css" />
 		<script src="./js/libs/jquery.min.js"></script>
@@ -86,16 +75,15 @@
 		<div id="content">
 			<h2>Face tracking in images</h2>
 			<div id="container">
-				<canvas id="image" width="700" height="700"></canvas>
-				<canvas id="overlay" width="700" height="700"></canvas>
-				<canvas id="overlay2" width="700" height="700"></canvas>
+				<canvas id="image" width="625" height="500"></canvas>
+				<canvas id="overlay" width="625" height="500"></canvas>
+				<canvas id="overlay2" width="625" height="500"></canvas>
 			</div>
 			<br/>
 			<input type="button" class="btn" id="start" value="start" onclick="animateClean()"></input>
 			<input type="button" class="btn" value="manually select face" onclick="selectBox()"></input>
 			<input type = "button" class="btn" id="save" name="saveMe" value="save me" onclick="to_image()"></input>
-			<!--input type="button" class="btn" id="clickme" value="Choose File" /-->
-			<input type="file" class="btn" id="files" name="files[]" onclick="fileHandleSelect()"/>
+			<input type="file" class="btn" id="files" name="files[]" />
 			<p id="convergence"></p>
 			<div id="text">
 				<p>This is an example of precise face-tracking in an image using the javascript library <a href="https://github.com/auduno/clmtrackr"><em>clmtrackr</em></a>. To try it out, simply click start.</p>
@@ -110,20 +98,23 @@
 				var overlay2 = document.getElementById('overlay2');
 				var overlayCC = overlay.getContext('2d');
 				var overlay2CC = overlay2.getContext('2d');
-
 				var img = new Image();
 				img.onload = function() {
-					cc.drawImage(img,0,0,img.width, img.height);
+					cc.drawImage(img,0,0,625, 500);
 					window.setTimeout(document.getElementById("start").click(),2000);
-					// document.getElementById("files").click();
 				};
+				var list = [1,7,10, 16,19,20,21,22,24,29,34,35,40,41,42,45, 46,47,50,52,53,54,68,75,91,92,93,97,103,104,110,111,113,115,116,118,119,121,124, 126,128,
+129,134,135,136,140,143,144,147,151,155,156,159,161,162,164,165,166,168,170,171,172,
+175,176,180,181,187,188,192,193,201,205,207,209,211,213,219,221,223,225,227,233,235,236,237,
+240,242,247,250,253,254,258,260,261,263,265,268,271,272,284,285,288,291,292,293,295,296,301,
+302,303,304,306,307,309,313,316,317,318,320,321,322,323,325,327,328,331,333,334,335,337,
+340,341,346,368,369,371,372,373,377,379,380,381,384,390,392,399,402,405,406,408,411,412,
+415,419,420,422,429,430,433,434,435,444,448,449,453,459,461,464,465,467,468,469,471,472,473,
+474,475,479,481,487,491,492,494,495,497];
 
 				var i = (localStorage.getItem("i")).toString();
-				var pic_num = 'pic'+i;
-				var curr_pic = names.data[parseInt(i)][pic_num];
-				// window.alert(curr_pic);
-				// window.alert(names.data);
-				img.src = curr_pic;
+				//var curr_pic = names.data[parseInt(i)][pic_num];
+				img.src = '../../JoyNotFound184/'+list[i].toString();
 				//img.src = './media/franck_02159.jpg';
 
 				var ctrack = new clm.tracker({stopOnConvergence : true});
@@ -136,83 +127,69 @@
 
 				var drawRequest;
 
-
 				function to_image(){
-
 	                var canvas = document.getElementById("image");
 	                document.getElementById("image").src = canvas.toDataURL();
 	                Canvas2Image.saveAsPNG(canvas);
 	          //       html2canvas($("#container"), {
 			        //     onrendered: function(canvas) {
 			        //         theCanvas = canvas;
-
-
 			        //         // canvas.toBlob(function(blob) {
 			        //         //     saveAs(blob, "Dashboard.png"); 
 			        //         // });
 			        //     }
 			        // });
 	            }
-
 				function animateClean() {
 					ctrack.start(document.getElementById('image'));
 					drawLoop();
 				}
-
 				function animate(box) {
 					ctrack.start(document.getElementById('image'), box);
 					drawLoop();
 				}
-
 				function drawLoop() {
 					drawRequest = requestAnimFrame(drawLoop);
-					overlayCC.clearRect(0, 0, 700, 700);
+					overlayCC.clearRect(0, 0, 720, 576);
 					if (ctrack.getCurrentPosition()) {
 						ctrack.draw(overlay);
 					}
 				}
-
 				// detect if tracker fails to find a face
 				document.addEventListener("clmtrackrNotFound", function(event) {
 					ctrack.stop();
-					document.getElementById("save").click();
-					console.log("Not found: i =" + localStorage.getItem("i"));
+					console.log("Not found: i =" + list[localStorage.getItem("i")]);
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems with finding a face in this image. Try selecting the face in the image manually.")
-					setTimeout("window.location.href='clm_image.html'", 500);
+					setTimeout("window.location.href='clm_image2.html'", 500);
 				}, false);
-
 				// detect if tracker loses tracking of face
 				document.addEventListener("clmtrackrLost", function(event) {
 					ctrack.stop();
 					document.getElementById("save").click();
-					console.log("Lost: i =" + localStorage.getItem("i"));
+					console.log("Lost: i =" + list[localStorage.getItem("i")]);
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					alert("The tracking had problems converging on a face in this image. Try selecting the face in the image manually.")
 					setTimeout("window.location.href='clm_image.html'", 500);
 				}, false);
-
 				// detect if tracker has converged
 				document.addEventListener("clmtrackrConverged", function(event) {
 					document.getElementById('convergence').innerHTML = "CONVERGED";
 					document.getElementById('convergence').style.backgroundColor = "#00FF00";
 					// stop drawloop
 					cancelRequestAnimFrame(drawRequest);
-					console.log("Good: i =" + localStorage.getItem("i"));
+					console.log("Good: i =" + list[localStorage.getItem("i")]);
 					document.getElementById("save").click();
 					localStorage.setItem("i", parseInt(localStorage.getItem("i"))+1);
 					setTimeout("window.location.href='clm_image.html'", 500);
 				}, false);
-				
-
 				// update stats on iteration
 				document.addEventListener("clmtrackrIteration", function(event) {
 					stats.update();
 				}, false);
-
 				// manual selection of faces (with jquery imgareaselect plugin)
 				function selectBox() {
-					overlayCC.clearRect(0, 0, 700, 700);
+					overlayCC.clearRect(0, 0, 720, 576);
 					document.getElementById('convergence').innerHTML = "";
 					ctrack.reset();
 					$('#overlay').addClass('hide');
@@ -222,7 +199,6 @@
 						onSelectEnd : function(img, selection) {
 							// create box
 							var box = [selection.x1, selection.y1, selection.width, selection.height];
-
 							// do fitting
 							animate(box);
 							$('#overlay').removeClass('hide');
@@ -231,7 +207,6 @@
 						autoHide : true
 					});
 				}
-
 				// function to start showing images
 				function loadImage() {
 					if (fileList.indexOf(fileIndex) < 0) {
@@ -239,18 +214,17 @@
 						reader.onload = (function(theFile) {
 							return function(e) {
 								// check if positions already exist in storage
-
 								// Render thumbnail.
 								var canvas = document.getElementById('image')
 								var cc = canvas.getContext('2d');
 								var img = new Image();
 								img.onload = function() {
-									if (img.height > 700 || img.width > 700) {
+									if (img.height > 500 || img.width > 700) {
 										var rel = img.height/img.width;
 										var neww = 700;
 										var newh = neww*rel;
-										if (newh > 700) {
-											newh = 700;
+										if (newh > 500) {
+											newh = 500;
 											neww = newh/rel;
 										}
 										canvas.setAttribute('width', neww);
@@ -267,14 +241,11 @@
 							};
 						})(fileList[fileIndex]);
 						reader.readAsDataURL(fileList[fileIndex]);
-						overlayCC.clearRect(0, 0, 700, 700);
+						overlayCC.clearRect(0, 0, 720, 576);
 						document.getElementById('convergence').innerHTML = "";
 						ctrack.reset();
 					}
-
-
 				}
-
 				// set up file selector and variables to hold selections
 				var fileList, fileIndex;
 				if (window.File && window.FileReader && window.FileList) {
@@ -290,12 +261,9 @@
 						if (files.length > 0) {
 							fileIndex = 0;
 						}
-
 						loadImage();
-
 					}
 					document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
 				} else {
 					$('#files').addClass("hide");
 					$('#loadimagetext').addClass("hide");
